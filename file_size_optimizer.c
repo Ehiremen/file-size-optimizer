@@ -129,9 +129,12 @@ int readAndTrimFile(char* fileToBeRead) {
      */
     while ((inputBuffer = getc(minifyThisFile)) != EOF) {
         if (inputBuffer == '\n'){
-            inputBuffer = '\0';
+            //Using inputBuffer = '\0'; putc(inputBuffer, bufferFile); led to unreadable chars
+            //showing up in the file
+            fprintf(bufferFile, " ");
+        } else{
+            fprintf(bufferFile, "%c", inputBuffer);
         }
-        putc(inputBuffer, bufferFile);
     }
 
     //get the size of the bufferFile to know the max memory needed to be allocated to the bundleFile
@@ -155,8 +158,6 @@ int readAndTrimFile(char* fileToBeRead) {
         //Check if testBuffer[i] and the character after it are both whitespace characters
         if (isspace(testBuffer[i]) && isspace(testBuffer[i+1])){
             //this basically skips over i
-            //my logic is that i and (i+1) both hold whitespaces, so (i+1) can "represent" them both
-            i += 1;
         } else{
             putc(testBuffer[i], bundleFile);
         }
